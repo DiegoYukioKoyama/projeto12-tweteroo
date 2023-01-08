@@ -11,14 +11,14 @@ const tweets = []
 
 const PORT = 5000;
 
-server.post("/sign-up", (req, res) =>{
+server.post("/sign-up", (req, res) => {
     const date = req.body
-    user.push({...date})
-    if(user.username === "" || user.avatar === ""){
+    if (date.username === "" || date.avatar === "") {
         console.log("Preencha os dados solicitados!")
         return;
     }
-        res.send("ok")  
+    user.push({ ...date })
+    res.send("ok")
 })
 
 server.get("/sign-up", (req, res) => {
@@ -28,11 +28,13 @@ server.get("/sign-up", (req, res) => {
 server.post("/tweets", (req, res) => {
     const date = req.body
     let avatar = ""
-    user.find((item) => {if(item.username === date.username){
-        avatar = item.avatar
-    }})
-    if(user.find((element) => element.username === date.username)){
-        tweets.push({...date, avatar})
+    user.find((item) => {
+        if (item.username === date.username) {
+            avatar = item.avatar
+        }
+    })
+    if (user.find((element) => element.username === date.username)) {
+        tweets.push({ ...date, avatar })
         res.send("ok")
         return;
     }
@@ -40,6 +42,11 @@ server.post("/tweets", (req, res) => {
 })
 
 server.get("/tweets", (req, res) => {
+    const last10 = tweets.length - 10
+    if (tweets.length >= 10) {
+        res.send(tweets.slice(last10))
+        return;
+    }
     res.send(tweets)
 })
 
